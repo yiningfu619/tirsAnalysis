@@ -775,240 +775,78 @@ HTML("
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap');
 
-.about-wrap {
-  font-family: 'DM Sans', sans-serif;
-  padding: 20px 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  min-height: 100vh;
-}
+.aw { font-family:'DM Sans',sans-serif; padding:16px 20px; background:#f4f6fb; }
 
-/* ── Stats row ── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.stat-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 14px 12px 12px;
-  text-align: center;
-  border: 1px solid #e4e9f2;
-  position: relative;
-  overflow: hidden;
-}
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
-.stat-c1::before { background: #1f3b73; }
-.stat-c2::before { background: #2f69b1; }
-.stat-c3::before { background: #58b947; }
-.stat-c4::before { background: #e53935; }
-.stat-c5::before { background: #c27ba0; }
-.stat-c6::before { background: #8e7cc3; }
-.stat-num { font-size: 22px; font-weight: 700; line-height: 1.1; margin-bottom: 3px; }
-.stat-c1 .stat-num { color: #1f3b73; }
-.stat-c2 .stat-num { color: #2f69b1; }
-.stat-c3 .stat-num { color: #58b947; }
-.stat-c4 .stat-num { color: #e53935; }
-.stat-c5 .stat-num { color: #c27ba0; }
-.stat-c6 .stat-num { color: #8e7cc3; }
-.stat-label { font-size: 11px; color: #7a8499; font-weight: 500; }
+/* Stats */
+.sr { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-bottom:14px; }
+@media(max-width:700px){ .sr { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:420px){ .sr { grid-template-columns:repeat(2,1fr); } }
 
-/* ── Main grid ── */
-.main-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 14px;
-}
+.sc { background:#fff; border-radius:10px; padding:13px 10px 11px; text-align:center; border:1px solid #e4e9f2; position:relative; overflow:hidden; }
+.sc::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; }
+.c1::before{background:#1f3b73;} .c2::before{background:#2f69b1;} .c3::before{background:#58b947;}
+.c4::before{background:#e53935;} .c5::before{background:#c27ba0;} .c6::before{background:#8e7cc3;}
+.sn { font-size:22px; font-weight:700; line-height:1.1; margin-bottom:3px; }
+.c1 .sn{color:#1f3b73;} .c2 .sn{color:#2f69b1;} .c3 .sn{color:#58b947;}
+.c4 .sn{color:#e53935;} .c5 .sn{color:#c27ba0;} .c6 .sn{color:#8e7cc3;}
+.sl { font-size:11px; color:#7a8499; font-weight:500; }
 
-/* ── Section card ── */
-.section-card {
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #e4e9f2;
-  overflow: hidden;
-}
-.section-head {
-  padding: 10px 16px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.head-impact  { background: #1f3b73; }
-.head-specs   { background: #2c3e5c; }
-.head-limits  { background: #374151; }
+/* Main grid */
+.mg { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+@media(max-width:800px){ .mg { grid-template-columns:1fr; } }
 
-/* ── Impact ── */
-.impact-body {
-  padding: 16px;
-  font-size: 13.5px;
-  line-height: 1.75;
-  color: #2d3748;
-}
+.card { background:#fff; border-radius:12px; border:1px solid #e4e9f2; overflow:hidden; }
+.ch { padding:10px 16px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:#fff; display:flex; align-items:center; gap:7px; }
+.hi{background:#1f3b73;} .hs{background:#2c3e5c;} .hl{background:#374151;}
 
-/* ── Spec items ── */
-.spec-item {
-  padding: 13px 16px;
-  border-bottom: 1px solid #f0f3f9;
-  display: flex;
-  gap: 11px;
-  align-items: flex-start;
-}
-.spec-item:last-child { border-bottom: none; }
-.spec-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 7px;
-  border-radius: 20px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.b1 { background: #e8eef8; color: #1f3b73; }
-.b2 { background: #e5eef8; color: #2f69b1; }
-.b3 { background: #e8f5e4; color: #3a8c2c; }
-.b4 { background: #fdf3e3; color: #b07a12; }
-.b5 { background: #fde8e8; color: #c0392b; }
-.spec-text { font-size: 13px; line-height: 1.6; color: #2d3748; }
+.ib { padding:16px; font-size:13.5px; line-height:1.75; color:#2d3748; }
 
-/* ── Limitation items ── */
-.limit-item {
-  padding: 13px 16px;
-  border-bottom: 1px solid #f0f3f9;
-  display: flex;
-  gap: 11px;
-  align-items: flex-start;
-}
-.limit-item:last-child { border-bottom: none; }
-.limit-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-.limit-title { font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
-.limit-desc  { font-size: 12px; line-height: 1.6; color: #5a6a85; }
+.si { padding:12px 16px; border-bottom:1px solid #f0f3f9; display:flex; gap:10px; align-items:flex-start; }
+.si:last-child{border-bottom:none;}
+.sb { font-family:'DM Mono',monospace; font-size:11px; font-weight:500; padding:2px 8px; border-radius:20px; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+.b1{background:#e8eef8;color:#1f3b73;} .b2{background:#e5eef8;color:#2f69b1;}
+.b3{background:#e8f5e4;color:#3a8c2c;} .b4{background:#fdf3e3;color:#b07a12;} .b5{background:#fde8e8;color:#c0392b;}
+.st { font-size:13px; line-height:1.6; color:#2d3748; }
+
+.li { padding:12px 16px; border-bottom:1px solid #f0f3f9; display:flex; gap:10px; align-items:flex-start; }
+.li:last-child{border-bottom:none;}
+.ld { width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px; }
+.lt { font-size:13px; font-weight:700; color:#1e293b; margin-bottom:3px; }
+.lx { font-size:12px; line-height:1.6; color:#5a6a85; }
 </style>
 
-<div class='about-wrap'>
-
-  <!-- Stats row -->
-  <div class='stats-row'>
-    <div class='stat-card stat-c1'>
-      <div class='stat-num'>4,461</div>
-      <div class='stat-label'>Children Enrolled</div>
-    </div>
-    <div class='stat-card stat-c2'>
-      <div class='stat-num'>50</div>
-      <div class='stat-label'>Geo. Clusters</div>
-    </div>
-    <div class='stat-card stat-c3'>
-      <div class='stat-num'>3</div>
-      <div class='stat-label'>Epi. Seasons</div>
-    </div>
-    <div class='stat-card stat-c4'>
-      <div class='stat-num' style='font-size:17px;'>2021–2023</div>
-      <div class='stat-label'>Study Period</div>
-    </div>
-    <div class='stat-card stat-c5'>
-      <a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='text-decoration:none;'>
-        <div class='stat-num' style='font-size:13px;'>NCT04343521 ↗</div>
-      </a>
-      <div class='stat-label'>Trial Registry</div>
-    </div>
-    <div class='stat-card stat-c6'>
-      <div class='stat-num'>2–15</div>
-      <div class='stat-label'>Age Range (yrs)</div>
-    </div>
+<div class='aw'>
+  <div class='sr'>
+    <div class='sc c1'><div class='sn'>4,461</div><div class='sl'>Children Enrolled</div></div>
+    <div class='sc c2'><div class='sn'>50</div><div class='sl'>Geo. Clusters</div></div>
+    <div class='sc c3'><div class='sn'>3</div><div class='sl'>Epi. Seasons</div></div>
+    <div class='sc c4'><div class='sn' style='font-size:17px;'>2021–2023</div><div class='sl'>Study Period</div></div>
+    <div class='sc c5'><a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='text-decoration:none;'><div class='sn' style='font-size:13px;'>NCT04343521 ↗</div></a><div class='sl'>Trial Registry</div></div>
+    <div class='sc c6'><div class='sn'>2–15</div><div class='sl'>Age Range (yrs)</div></div>
   </div>
 
-  <!-- Main 3-column grid -->
-  <div class='main-grid'>
-
-    <!-- Impact -->
-    <div class='section-card'>
-      <div class='section-head head-impact'>
-        <span>📢</span> Real-World Impact
-      </div>
-      <div class='impact-body'>
-        This dashboard analyzes spatiotemporal clustering of Aedes-borne viruses using test-negative design data, revealing whether disease transmission is <strong>localized or fully disseminated</strong>. Findings show that TIRS is most effective during early, highly clustered outbreak phases — guiding public health officials to intervene <em>before</em> community transmission becomes widespread.
-      </div>
+  <div class='mg'>
+    <div class='card'>
+      <div class='ch hi'>📢 Real-World Impact</div>
+      <div class='ib'>This dashboard analyzes spatiotemporal clustering of Aedes-borne viruses using test-negative design data, revealing whether disease transmission is <strong>localized or fully disseminated</strong>. Findings show that TIRS is most effective during early, highly clustered outbreak phases — guiding public health officials to intervene <em>before</em> community transmission becomes widespread.</div>
     </div>
 
-    <!-- Dataset Specs -->
-    <div class='section-card'>
-      <div class='section-head head-specs'>
-        <span>📋</span> Dataset Specifications
-      </div>
-      <div class='spec-item'>
-        <span class='spec-badge b1'>① Source</span>
-        <span class='spec-text'>Confidential trial dataset from <a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='color:#2f69b1;font-weight:600;'>NCT04343521</a>, maintained in <strong>REDCap</strong>.</span>
-      </div>
-      <div class='spec-item'>
-        <span class='spec-badge b2'>② Population</span>
-        <span class='spec-text'><strong>4,461 children aged 2–15 yrs</strong> across <strong>50 geo. clusters</strong>.</span>
-      </div>
-      <div class='spec-item'>
-        <span class='spec-badge b3'>③ Method</span>
-        <span class='spec-text'>Two-arm cluster-RCT; weekly surveillance via home visits, calls &amp; SMS + <strong>PCR &amp; IgM</strong> testing.</span>
-      </div>
-      <div class='spec-item'>
-        <span class='spec-badge b4'>④ Location</span>
-        <span class='spec-text'>Aedes hotspot in <strong>Mérida, Yucatan, Mexico</strong>.</span>
-      </div>
-      <div class='spec-item'>
-        <span class='spec-badge b5'>⑤ Period</span>
-        <span class='spec-text'>Three epi. seasons: <strong>Jul 1, 2021 – Dec 31, 2023</strong>.</span>
-      </div>
+    <div class='card'>
+      <div class='ch hs'>📋 Dataset Specifications</div>
+      <div class='si'><span class='sb b1'>① Source</span><span class='st'>Confidential trial dataset from <a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='color:#2f69b1;font-weight:600;'>NCT04343521</a>, maintained in <strong>REDCap</strong>.</span></div>
+      <div class='si'><span class='sb b2'>② Population</span><span class='st'><strong>4,461 children aged 2–15 yrs</strong> across <strong>50 geo. clusters</strong>.</span></div>
+      <div class='si'><span class='sb b3'>③ Method</span><span class='st'>Two-arm cluster-RCT; weekly surveillance via home visits, calls &amp; SMS + <strong>PCR &amp; IgM</strong> testing.</span></div>
+      <div class='si'><span class='sb b4'>④ Location</span><span class='st'>Aedes hotspot in <strong>Mérida, Yucatan, Mexico</strong>.</span></div>
+      <div class='si'><span class='sb b5'>⑤ Period</span><span class='st'>Three epi. seasons: <strong>Jul 1, 2021 – Dec 31, 2023</strong>.</span></div>
     </div>
 
-    <!-- Limitations -->
-    <div class='section-card'>
-      <div class='section-head head-limits'>
-        <span>⚠</span> Study Limitations
-      </div>
-      <div class='limit-item'>
-        <div class='limit-dot' style='background:#e53935;'></div>
-        <div>
-          <div class='limit-title'>Secondary Analysis</div>
-          <div class='limit-desc'>Constrained by original trial design, limiting adaptation for new research questions.</div>
-        </div>
-      </div>
-      <div class='limit-item'>
-        <div class='limit-dot' style='background:#e5a823;'></div>
-        <div>
-          <div class='limit-title'>Statistical Power</div>
-          <div class='limit-desc'>DENV-3 decline required expanding to ABV, possibly obscuring individual virus dynamics.</div>
-        </div>
-      </div>
-      <div class='limit-item'>
-        <div class='limit-dot' style='background:#2f69b1;'></div>
-        <div>
-          <div class='limit-title'>Temporal Generalizability</div>
-          <div class='limit-desc'>2023 was anomalously high-transmission; patterns may not apply to standard seasons.</div>
-        </div>
-      </div>
-      <div class='limit-item'>
-        <div class='limit-dot' style='background:#1f3b73;'></div>
-        <div>
-          <div class='limit-title'>Intervention Threshold</div>
-          <div class='limit-desc'>TIRS is timing-sensitive; once transmission shifts citywide, community-level action alone is insufficient.</div>
-        </div>
-      </div>
+    <div class='card'>
+      <div class='ch hl'>⚠ Study Limitations</div>
+      <div class='li'><div class='ld' style='background:#e53935;'></div><div><div class='lt'>Secondary Analysis</div><div class='lx'>Constrained by original trial design, limiting adaptation for new research questions.</div></div></div>
+      <div class='li'><div class='ld' style='background:#e5a823;'></div><div><div class='lt'>Statistical Power</div><div class='lx'>DENV-3 decline required expanding to ABV, possibly obscuring individual virus dynamics.</div></div></div>
+      <div class='li'><div class='ld' style='background:#2f69b1;'></div><div><div class='lt'>Temporal Generalizability</div><div class='lx'>2023 was anomalously high-transmission; patterns may not apply to standard seasons.</div></div></div>
+      <div class='li'><div class='ld' style='background:#1f3b73;'></div><div><div class='lt'>Intervention Threshold</div><div class='lx'>TIRS is timing-sensitive; once transmission shifts citywide, community-level action alone is insufficient.</div></div></div>
     </div>
-
   </div>
 </div>
 ")
