@@ -828,15 +828,15 @@ HTML("
   <div class='mg'>
     <div class='card'>
       <div class='ch hi'>📢 Real-World Impact</div>
-      <div class='ib'>This dashboard analyzes spatiotemporal clustering of Aedes-borne viruses using test-negative design data, revealing whether disease transmission is <strong>localized or fully disseminated</strong>. Findings show that TIRS is most effective during early, highly clustered outbreak phases — guiding public health officials to intervene <em>before</em> community transmission becomes widespread.</div>
+      <div class='ib'>This interactive dashboard provides a framework for analyzing the spatiotemporal clustering of Aedes-borne viruses using test-negative design data, allowing users to determine whether disease transmission is localized or fully disseminated. By revealing that targeted indoor residual spraying (TIRS) is most effective during the early, highly clustered phases of an outbreak, these findings guide public health officials to deploy rapid interventions before community transmission becomes widespread. </div>
     </div>
 
     <div class='card'>
       <div class='ch hs'>📋 Dataset Specifications</div>
       <div class='si'><span class='sb b1'>① Source</span><span class='st'>Confidential trial dataset from <a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='color:#2f69b1;font-weight:600;'>NCT04343521</a>, maintained in <strong>REDCap</strong>.</span></div>
       <div class='si'><span class='sb b2'>② Population</span><span class='st'><strong>4,461 children aged 2–15 yrs</strong> across <strong>50 geo. clusters</strong>.</span></div>
-      <div class='si'><span class='sb b3'>③ Method</span><span class='st'>Two-arm cluster-RCT; weekly surveillance via home visits, calls &amp; SMS + <strong>PCR &amp; IgM</strong> testing.</span></div>
-      <div class='si'><span class='sb b4'>④ Location</span><span class='st'>Aedes hotspot in <strong>Mérida, Yucatan, Mexico</strong>.</span></div>
+<div class='si'><span class='sb b3'>③ Method</span><span class='st'>Two-arm, parallel, unblinded, cluster-randomized trial; weekly surveillance via home visits, calls &amp; SMS + <strong>PCR &amp; IgM</strong> testing.</span></div>
+      <div class='si'><span class='sb b4'>④ Location</span><span class='st'>Aedes-Borne disease hotspot in <strong>Mérida, Yucatan, Mexico</strong>.</span></div>
       <div class='si'><span class='sb b5'>⑤ Period</span><span class='st'>Three epi. seasons: <strong>Jul 1, 2021 – Dec 31, 2023</strong>.</span></div>
     </div>
 
