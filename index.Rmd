@@ -7,7 +7,7 @@ output:
       vertical_layout: fill
       navbar:
         - { title: "GitHub", href: "https://github.com/yiningfu619/tirsAnalysis.git", align: right, icon: "fa-github" }
-        - { title: "Source Code", href: "https://github.com/yiningfu619/tirsAnalysis.git/blob/main/index.Rmd", align: right, icon: "fa-code" }
+        - { title: "Source Code", href: "https://github.com/yiningfu619/tirsAnalysis/blob/main/index.Rmd", align: right, icon: "fa-code" }
 theme: cosmo
 
 ---
