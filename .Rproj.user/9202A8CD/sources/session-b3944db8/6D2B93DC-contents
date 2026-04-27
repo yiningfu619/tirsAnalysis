@@ -1,0 +1,759 @@
+---
+title: 'Targeted Indoor Residual Spraying (TIRS) Effectiveness in Mérida, 2023'
+author: "Carina Fu"
+output: 
+    flexdashboard::flex_dashboard:
+      orientation: columns
+      vertical_layout: fill
+theme: cosmo
+---
+
+```{r setup, include=FALSE}
+# ==========================================
+# Load required packages (shiny removed)
+# ==========================================
+library(flexdashboard)
+library(htmltools)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(tidyr)
+library(scales)
+library(plotly)
+library(DT)
+
+tnd.tirs <- read.csv("/Users/fuyi/Library/CloudStorage/OneDrive-Emory/DATA555/tnd_tirs_data.csv")
+```
+
+```{css}
+.chart-stage,
+.section.level3,
+.sidebar {
+  overflow: visible !important;
+}
+
+.chart-wrapper {
+  border-radius: 10px;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  background: #ffffff;
+}
+
+.chart-title {
+  font-weight: 700;
+  color: #1f3b73;
+}
+
+.small-note {
+  color: #6b7280;
+  font-size: 15px;
+  margin-top: -6px;
+  margin-bottom: 12px;
+}
+
+/* ===== Tau card ===== */
+.tau-card-final {
+  background: linear-gradient(180deg, #ef5350 0%, #e53935 100%);
+  color: white;
+  border-radius: 10px;
+  padding: 16px 18px 14px 18px;
+  min-height: 120px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  margin-top: 0;
+  text-align: center;
+}
+
+.tau-main-line {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.tau-mid-line {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.tau-bottom-line {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  opacity: 0.98;
+}
+
+/* hide tau panel title, but keep the panel itself */
+.tau-panel .chart-title {
+  display: none !important;
+}
+
+/* give tau panel a little breathing room without pushing upward */
+.tau-panel .chart-stage {
+  padding-top: 14px !important;
+  padding-bottom: 6px !important;
+}
+
+/* stop weird collapsing behavior */
+.tau-panel .chart-wrapper {
+  min-height: auto !important;
+}
+
+/* ===== Interpretation card ===== */
+.interp-card {
+  background: #eaf3fb;
+  border-radius: 10px;
+  padding: 18px;
+  min-height: 190px;
+  border: 1px solid #d9e7f6;
+}
+
+/* ===== Footer note ===== */
+.results-note {
+  color: #6b7280;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+table {
+  font-size: 15px;
+}
+```
+
+```{r data-clean, include=FALSE}
+# ==========================================
+# Data cleaning, extract Year column explicitly
+# ==========================================
+clean_df <- tnd.tirs %>%
+  mutate(
+    var6_pcr_date = as.character(var6_pcr_date),
+    var6_pcr_date = na_if(var6_pcr_date, ""),
+    Date = suppressWarnings(mdy(var6_pcr_date)),
+    Year = year(Date)
+  ) 
+
+# ==========================================
+# Generate base summary data (keep all 0s, handle Year labels)
+# ==========================================
+summary_base <- clean_df %>%
+  group_by(Year) %>%
+  summarise(
+    DENV = sum(var6_pcr_res___1 == "Checked", na.rm = TRUE),
+    ZIKV = sum(var6_pcr_res___2 == "Checked", na.rm = TRUE),
+    CHIKV = sum(var6_pcr_res___3 == "Checked", na.rm = TRUE),
+    .groups = "drop" 
+  ) %>%
+  mutate(Year = ifelse(is.na(Year), "Unknown", as.character(Year)))
+
+# ==========================================
+# Prepare data for [Bar Chart]
+# ==========================================
+summary_data_bar <- summary_base %>%
+  pivot_longer(cols = c(DENV, ZIKV, CHIKV), names_to = "Virus", values_to = "Count") %>%
+  filter(Count > 0) %>% 
+  group_by(Year) %>%
+  mutate(
+    Prop = Count / sum(Count),
+    Label = paste0(Virus, "\n", Count, "\n(", percent(Prop, accuracy = 0.1), ")")
+  ) %>%
+  ungroup()
+```
+
+Background
+=======================================================================
+
+Column {.sidebar data-width=200}
+-----------------------------------------------------------------------
+
+### 📌 Data Note
+> All tables and figures presented on this page are derived from the test-negative design (TND) subset, representing a specific analytical cohort rather than the raw overall population.
+
+Column {data-width="500"}
+---------------------------------
+
+### Data Summary Table
+
+```{r}
+# ==========================================
+# Prepare and generate data for [Table] (including Total)
+# ==========================================
+table_data <- summary_base %>%
+  mutate(Total = DENV + ZIKV + CHIKV) %>%
+  bind_rows(
+    summarise(., 
+      Year = "Total",
+      DENV = sum(DENV, na.rm = TRUE),
+      ZIKV = sum(ZIKV, na.rm = TRUE),
+      CHIKV = sum(CHIKV, na.rm = TRUE),
+      Total = sum(Total, na.rm = TRUE)
+    )
+  )
+
+knitr::kable(table_data, align = "c")
+```
+
+
+### 2023 DENV-3 Summary
+
+```{r}
+# ---------------------------------------------------------
+# Prepare 2023 DENV-3 Season Data (Jul-Dec, exact months)
+# ---------------------------------------------------------
+df_denv3_bg <- tnd.tirs %>% 
+  mutate(participant_id = paste0(record_id, "_", rn2_pt_id)) %>%
+  dplyr::select(participant_id, cl_nr, rn1_br, var6_symp_date, var6_abv_pos___1, var6_denv_type___3) %>%
+  mutate(
+    cluster = as.character(cl_nr),
+    illness_onset = as.Date(var6_symp_date, format = "%m/%d/%Y"),
+    intervention = factor(rn1_br, levels = c(1, 2), labels = c("Control", "TIRS")),
+    is_case = as.numeric(var6_abv_pos___1),
+    is_denv3 = case_when(
+      as.character(var6_denv_type___3) %in% c("Checked", "1") ~ 1,
+      is_case == 0 ~ 0,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  filter(illness_onset >= as.Date("2023-07-01") & illness_onset <= as.Date("2023-12-31")) %>%
+  drop_na(illness_onset, cluster, intervention, is_denv3) %>%
+  distinct(participant_id, illness_onset, .keep_all = TRUE)
+```
+
+```{r}
+plot_data <- df_denv3_bg %>%
+  filter(is_denv3 == 1)
+
+weekly_counts <- plot_data %>%
+  mutate(Week = floor_date(illness_onset, unit = "week", week_start = 1)) %>%
+  count(Week, name = "Weekly_Cases") %>%
+  tidyr::complete(
+    Week = seq(
+      floor_date(as.Date("2023-07-01"), unit = "week", week_start = 1),
+      floor_date(as.Date("2023-12-31"), unit = "week", week_start = 1),
+      by = "1 week"
+    ),
+    fill = list(Weekly_Cases = 0)
+  ) %>%
+  mutate(
+    Week_End = Week + 6,
+    hover_text = paste0(
+      "Week: ", format(Week, "%b %d"), " - ", format(Week_End, "%b %d, %Y"), "\n",
+      "Cases: ", Weekly_Cases
+    )
+  )
+
+p_weekly_smooth <- ggplot() +
+  geom_col(
+    data = weekly_counts,
+    aes(x = Week, y = Weekly_Cases, text = hover_text),
+    fill = "#56B4E9", width = 6, color = "white", alpha = 0.8
+  ) +
+  geom_smooth(
+    data = weekly_counts,
+    aes(x = Week, y = Weekly_Cases),
+    method = "loess", span = 0.35, se = FALSE,
+    color = "#E69F00", linewidth = 1.2
+  ) +
+  scale_x_date(
+    limits = c(as.Date("2023-06-26"), as.Date("2024-01-07")),
+    breaks = seq(as.Date("2023-07-03"), as.Date("2023-12-25"), by = "2 weeks"),
+    date_labels = "%b %d"
+  ) +
+  theme_minimal() +
+  labs(
+    x = "Week of Illness Onset",
+    y = "Number of DENV-3 Cases",
+    title = "DENV-3 Weekly Case Distribution (Jul-Dec 2023)"
+  ) +
+  theme(
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 11),
+    panel.grid.minor = element_blank()
+  )
+
+ggplotly(p_weekly_smooth, tooltip = "text")
+```
+
+> The monthly distribution reveals a sharp peak in DENV-3 cases during August 2023, reaching 15 cases. Following this sudden spike, the case count rapidly declined, with zero new cases reported from September 2023 through January 2024.
+
+
+Column {data-width="500"}
+---------------------------------
+
+### Age of Participants in Each Block
+
+```{r}
+df_unique <- clean_df %>%
+  distinct(record_id, .keep_all = TRUE)
+
+df_unique <- df_unique %>%
+  mutate(
+    age = as.numeric(Age),
+    Block_Type = factor(Block.Type)
+  ) %>%
+  group_by(Block_Type) %>%
+  mutate(Block_Label = paste0(Block_Type, "\n(n=", n(), ")")) %>%
+  ungroup()
+
+p <- ggplot(df_unique, aes(
+  x = Block_Label,
+  y = Age,
+  fill = Block_Type,
+  text = paste("ID:", record_id, "<br>Age:", age)
+)) +
+  geom_boxplot(outlier.alpha = 0.3) +
+  geom_jitter(width = 0.15, alpha = 0.3, size = 1) +
+  theme_minimal() +
+  labs(x = "Block Type", y = "Age", fill = "Block Type")
+
+ggplotly(p, tooltip = "text")
+```
+
+> The boxplots indicate that participant age distributions are highly comparable between the Central and Periphery blocks, with both exhibiting a median age around 10 years. Additionally, the plot shows that the External block contains only a single data point (n=1), which prevents a meaningful comparison of its distribution.
+
+
+TAU
+=======================================================================
+
+```{r tau-prep, include=FALSE}
+# ---------------------------
+# DENV-3 DATA
+# ---------------------------
+df_denv3_season <- tnd.tirs %>%
+  mutate(participant_id = paste0(record_id, "_", rn2_pt_id)) %>%
+  mutate(
+    cluster = as.character(cl_nr),
+    illness_onset = as.Date(var6_symp_date, format = "%m/%d/%Y"),
+    intervention = factor(rn1_br, levels = c(1,2), labels = c("Control","TIRS")),
+    is_case = as.numeric(var6_abv_pos___1),
+    is_denv3 = case_when(
+      as.character(var6_denv_type___3) %in% c("Checked","1") ~ 1,
+      is_case == 0 ~ 0,
+      TRUE ~ NA_real_
+    ),
+    Season_Part = case_when(
+      illness_onset >= as.Date("2023-07-01") & illness_onset < as.Date("2023-09-01") ~ "1. Early (Jul-Aug)",
+      illness_onset >= as.Date("2023-09-01") & illness_onset < as.Date("2023-11-01") ~ "2. Mid (Sep-Oct)",
+      illness_onset >= as.Date("2023-11-01") & illness_onset <= as.Date("2023-12-31") ~ "3. Late (Nov-Dec)",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Season_Part)) %>%
+  drop_na(illness_onset, cluster, intervention, is_denv3) %>%
+  distinct(participant_id, illness_onset, .keep_all = TRUE)
+
+# ---------------------------
+# ABV DATA
+# ---------------------------
+df_tau_ready <- tnd.tirs %>%
+  mutate(participant_id = paste0(record_id, "_", rn2_pt_id)) %>%
+  mutate(
+    cluster = as.character(cl_nr),
+    illness_onset = as.Date(var6_symp_date, format = "%m/%d/%Y"),
+    intervention = factor(rn1_br, levels = c(1,2), labels = c("Control","TIRS")),
+    is_case = as.numeric(var6_abv_pos___1),
+    Season_Part = case_when(
+      illness_onset >= as.Date("2023-07-01") & illness_onset < as.Date("2023-09-01") ~ "1. Early (Jul-Aug)",
+      illness_onset >= as.Date("2023-09-01") & illness_onset < as.Date("2023-11-01") ~ "2. Mid (Sep-Oct)",
+      illness_onset >= as.Date("2023-11-01") & illness_onset <= as.Date("2023-12-31") ~ "3. Late (Nov-Dec)",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  drop_na(illness_onset, cluster, is_case, intervention, Season_Part) %>%
+  distinct(participant_id, illness_onset, .keep_all = TRUE)
+
+# ---------------------------
+# DENV-3 tau function
+# ---------------------------
+calculate_denv3_tau <- function(df, t_window = 30) {
+  n <- nrow(df)
+  if (n < 2) {
+    return(data.frame(
+      `Neighborhood Pairs (Both Positive)` = NA,
+      `Neighborhood Pairs (At least 1 Negative)` = NA,
+      `Neighborhood Odds` = NA,
+      `Citywide Pairs (Both Positive)` = NA,
+      `Citywide Pairs (At least 1 Negative)` = NA,
+      `Citywide Odds` = NA,
+      `Clustering Ratio (Tau)` = NA,
+      check.names = FALSE
+    ))
+  }
+  time_mat   <- abs(outer(as.numeric(df$illness_onset), as.numeric(df$illness_onset), "-")) <= t_window
+  cluster_mat <- outer(df$cluster, df$cluster, "==")
+  linked_mat  <- outer(df$is_denv3 == 1, df$is_denv3 == 1, "&")
+  person_mat  <- outer(df$participant_id, df$participant_id, "==")
+  time_valid  <- time_mat & upper.tri(time_mat) & !person_mat
+  local_pairs_mask  <- time_valid & cluster_mat
+  a_local  <- sum(local_pairs_mask & linked_mat)
+  b_local  <- sum(local_pairs_mask & !linked_mat)
+  theta_cluster   <- ifelse(b_local == 0, NA, a_local / b_local)
+  global_pairs_mask <- time_valid
+  a_global  <- sum(global_pairs_mask & linked_mat)
+  b_global  <- sum(global_pairs_mask & !linked_mat)
+  theta_anywhere  <- ifelse(b_global == 0, NA, a_global / b_global)
+  tau <- ifelse(
+    is.na(theta_cluster) | is.na(theta_anywhere) | theta_anywhere == 0,
+    NA, theta_cluster / theta_anywhere
+  )
+  data.frame(
+    `Neighborhood Pairs (Both Positive)` = a_local,
+    `Neighborhood Pairs (At least 1 Negative)` = b_local,
+    `Neighborhood Odds` = theta_cluster,
+    `Citywide Pairs (Both Positive)` = a_global,
+    `Citywide Pairs (At least 1 Negative)` = b_global,
+    `Citywide Odds` = theta_anywhere,
+    `Clustering Ratio (Tau)` = tau,
+    check.names = FALSE
+  )
+}
+
+# ---------------------------
+# ABV tau function
+# ---------------------------
+calculate_new_tau <- function(df, t_window = 30) {
+  if (nrow(df) < 2) {
+    return(data.frame(
+      `Neighborhood Pairs (Both Positive)` = NA,
+      `Neighborhood Pairs (At least 1 Negative)` = NA,
+      `Neighborhood Odds` = NA,
+      `Citywide Pairs (Both Positive)` = NA,
+      `Citywide Pairs (At least 1 Negative)` = NA,
+      `Citywide Odds` = NA,
+      `Clustering Ratio (Tau)` = NA,
+      check.names = FALSE
+    ))
+  }
+  time_mat    <- abs(outer(as.numeric(df$illness_onset), as.numeric(df$illness_onset), "-")) <= t_window
+  cluster_mat <- outer(df$cluster, df$cluster, "==")
+  linked_mat  <- outer(df$is_case == 1, df$is_case == 1, "&")
+  person_mat  <- outer(df$participant_id, df$participant_id, "==")
+  time_valid  <- time_mat & upper.tri(time_mat) & !person_mat
+  local_pairs_mask  <- time_valid & cluster_mat
+  a_local  <- sum(local_pairs_mask & linked_mat)
+  b_local  <- sum(local_pairs_mask & !linked_mat)
+  theta_cluster   <- ifelse(b_local == 0, NA, a_local / b_local)
+  global_pairs_mask <- time_valid
+  a_global  <- sum(global_pairs_mask & linked_mat)
+  b_global  <- sum(global_pairs_mask & !linked_mat)
+  theta_anywhere  <- ifelse(b_global == 0, NA, a_global / b_global)
+  tau <- ifelse(
+    is.na(theta_cluster) | is.na(theta_anywhere) | theta_anywhere == 0,
+    NA, theta_cluster / theta_anywhere
+  )
+  data.frame(
+    `Neighborhood Pairs (Both Positive)` = a_local,
+    `Neighborhood Pairs (At least 1 Negative)` = b_local,
+    `Neighborhood Odds` = theta_cluster,
+    `Citywide Pairs (Both Positive)` = a_global,
+    `Citywide Pairs (At least 1 Negative)` = b_global,
+    `Citywide Odds` = theta_anywhere,
+    `Clustering Ratio (Tau)` = tau,
+    check.names = FALSE
+  )
+}
+
+# ---------------------------
+# Pre-compute all combinations
+# ---------------------------
+season_levels <- c("1. Early (Jul-Aug)", "2. Mid (Sep-Oct)", "3. Late (Nov-Dec)")
+windows       <- seq(7, 60, by = 7)
+default_window <- 30
+
+combos <- expand.grid(
+  disease = c("DENV-3", "ABV"),
+  season  = season_levels,
+  stringsAsFactors = FALSE
+)
+
+# Results at default window (for odds charts and tau summary table)
+odds_data <- lapply(seq_len(nrow(combos)), function(i) {
+  d <- combos$disease[i]; s <- combos$season[i]
+  df  <- if (d == "DENV-3") df_denv3_season %>% filter(Season_Part == s) else df_tau_ready %>% filter(Season_Part == s)
+  res <- if (d == "DENV-3") calculate_denv3_tau(df, default_window) else calculate_new_tau(df, default_window)
+  list(
+    local_linked    = res$`Neighborhood Pairs (Both Positive)`[[1]],
+    local_unlinked  = res$`Neighborhood Pairs (At least 1 Negative)`[[1]],
+    global_linked   = res$`Citywide Pairs (Both Positive)`[[1]],
+    global_unlinked = res$`Citywide Pairs (At least 1 Negative)`[[1]],
+    local_odds      = res$`Neighborhood Odds`[[1]],
+    global_odds     = res$`Citywide Odds`[[1]],
+    tau             = res$`Clustering Ratio (Tau)`[[1]]
+  )
+})
+names(odds_data) <- paste(combos$disease, combos$season, sep = "|")
+
+# Tau values across all windows (for tau vs time window chart)
+tau_all <- lapply(seq_len(nrow(combos)), function(i) {
+  d <- combos$disease[i]; s <- combos$season[i]
+  sapply(windows, function(w) {
+    df  <- if (d == "DENV-3") df_denv3_season %>% filter(Season_Part == s) else df_tau_ready %>% filter(Season_Part == s)
+    res <- if (d == "DENV-3") calculate_denv3_tau(df, w) else calculate_new_tau(df, w)
+    res$`Clustering Ratio (Tau)`[[1]]
+  })
+})
+names(tau_all) <- paste(combos$disease, combos$season, sep = "|")
+
+# Default combo index (DENV-3, Mid season)
+default_idx <- which(combos$disease == "DENV-3" & combos$season == "2. Mid (Sep-Oct)")
+```
+
+Column {data-width=280}
+-----------------------------------------------------------------------
+
+### Controls
+
+```{r}
+HTML("
+<div style='font-size:14px; color:#374151; line-height:1.8; padding:4px 2px;'>
+  <p>Use the <b>dropdown menus</b> embedded in each chart to switch between outcomes and season phases.</p>
+  <hr style='margin:8px 0; border-color:#e5e7eb;'>
+  <p><b>Outcome:</b> DENV-3 or Aedes-borne diseases (ABV)</p>
+  <p><b>Season phase:</b><br>
+    &nbsp;• Early (Jul–Aug)<br>
+    &nbsp;• Mid (Sep–Oct)<br>
+    &nbsp;• Late (Nov–Dec)
+  </p>
+  <p><b>Time window:</b> Odds charts are fixed at <b>30 days</b>. The τ vs Time Window chart shows all windows (7–60 days).</p>
+</div>
+")
+```
+
+### τ Summary (Window = 30 days)
+
+```{r}
+tau_summary_df <- data.frame(
+  Disease = combos$disease,
+  Season  = gsub("^\\d+\\. ", "", combos$season),
+  `τ`     = sapply(odds_data, function(x) ifelse(is.na(x$tau), "—", sprintf("%.3f", x$tau))),
+  Result  = sapply(odds_data, function(x) {
+    if (is.na(x$tau))    "Insufficient pairs"
+    else if (x$tau > 1)  "Clustering detected"
+    else if (x$tau == 1) "No difference"
+    else                 "Weak clustering"
+  }),
+  check.names = FALSE
+)
+
+DT::datatable(
+  tau_summary_df,
+  options = list(pageLength = 6, dom = "t", ordering = FALSE),
+  rownames = FALSE
+) %>%
+  DT::formatStyle(
+    "Result",
+    backgroundColor = DT::styleEqual(
+      c("Clustering detected", "Weak clustering", "Insufficient pairs"),
+      c("#d1fae5", "#fef3c7", "#f3f4f6")
+    )
+  )
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Local Odds (Within Cluster)
+
+Pairs of individuals in the **same cluster** within the time window (30 days). Use the dropdown to switch outcome / season.
+
+```{r}
+p_local <- plot_ly()
+
+for (i in seq_len(nrow(combos))) {
+  d   <- combos$disease[i]; s <- combos$season[i]
+  key <- paste(d, s, sep = "|")
+  od  <- odds_data[[key]]
+  vis <- (i == default_idx)
+  counts <- c(od$local_linked, od$local_unlinked)
+  counts[is.na(counts)] <- 0
+
+  p_local <- add_trace(
+    p_local,
+    x    = c("Linked", "Unlinked"),
+    y    = counts,
+    type = "bar",
+    name = paste(d, gsub("^\\d+\\. ", "", s), sep = " | "),
+    visible    = vis,
+    showlegend = FALSE,
+    marker     = list(color = c("#2f69b1", "#a9c2df")),
+    text       = paste0(c("Linked", "Unlinked"), ": ", comma(counts)),
+    hoverinfo  = "text"
+  )
+}
+
+make_local_annotation <- function(i) {
+  lo  <- odds_data[[paste(combos$disease[i], combos$season[i], sep = "|")]]$local_odds
+  txt <- if (is.na(lo)) "Neighborhood Odds = NA" else paste0("<b>Neighborhood Odds = ", sprintf("%.2f", lo), "</b>")
+  list(list(x = 0.5, y = -0.22, xref = "paper", yref = "paper",
+            text = txt, showarrow = FALSE, font = list(size = 13)))
+}
+
+buttons_local <- lapply(seq_len(nrow(combos)), function(i) {
+  vis <- rep(FALSE, nrow(combos)); vis[i] <- TRUE
+  list(
+    method = "update",
+    args   = list(list(visible = as.list(vis)),
+                  list(annotations = make_local_annotation(i))),
+    label  = paste(combos$disease[i], gsub("^\\d+\\. ", "", combos$season[i]), sep = " | ")
+  )
+})
+
+p_local %>%
+  layout(
+    updatemenus = list(list(
+      type = "dropdown", x = 0.0, y = 1.20, xanchor = "left",
+      buttons = buttons_local, active = default_idx - 1
+    )),
+    xaxis       = list(title = ""),
+    yaxis       = list(title = "Pair Count"),
+    showlegend  = FALSE,
+    height      = 270,
+    margin      = list(t = 55, b = 60),
+    annotations = make_local_annotation(default_idx)
+  ) %>%
+  config(displayModeBar = FALSE)
+```
+
+### Baseline Odds (Anywhere)
+
+Pairs of individuals **anywhere in the city** within the time window (30 days). Use the dropdown to switch outcome / season.
+
+```{r}
+p_global <- plot_ly()
+
+for (i in seq_len(nrow(combos))) {
+  d   <- combos$disease[i]; s <- combos$season[i]
+  key <- paste(d, s, sep = "|")
+  od  <- odds_data[[key]]
+  vis <- (i == default_idx)
+  counts <- c(od$global_linked, od$global_unlinked)
+  counts[is.na(counts)] <- 0
+
+  p_global <- add_trace(
+    p_global,
+    x    = c("Linked", "Unlinked"),
+    y    = counts,
+    type = "bar",
+    name = paste(d, gsub("^\\d+\\. ", "", s), sep = " | "),
+    visible    = vis,
+    showlegend = FALSE,
+    marker     = list(color = c("#58b947", "#b7d9ad")),
+    text       = paste0(c("Linked", "Unlinked"), ": ", comma(counts)),
+    hoverinfo  = "text"
+  )
+}
+
+make_global_annotation <- function(i) {
+  go  <- odds_data[[paste(combos$disease[i], combos$season[i], sep = "|")]]$global_odds
+  txt <- if (is.na(go)) "Citywide Odds = NA" else paste0("<b>Citywide Odds = ", sprintf("%.2f", go), "</b>")
+  list(list(x = 0.5, y = -0.22, xref = "paper", yref = "paper",
+            text = txt, showarrow = FALSE, font = list(size = 13)))
+}
+
+buttons_global <- lapply(seq_len(nrow(combos)), function(i) {
+  vis <- rep(FALSE, nrow(combos)); vis[i] <- TRUE
+  list(
+    method = "update",
+    args   = list(list(visible = as.list(vis)),
+                  list(annotations = make_global_annotation(i))),
+    label  = paste(combos$disease[i], gsub("^\\d+\\. ", "", combos$season[i]), sep = " | ")
+  )
+})
+
+p_global %>%
+  layout(
+    updatemenus = list(list(
+      type = "dropdown", x = 0.0, y = 1.20, xanchor = "left",
+      buttons = buttons_global, active = default_idx - 1
+    )),
+    xaxis       = list(title = ""),
+    yaxis       = list(title = "Pair Count"),
+    showlegend  = FALSE,
+    height      = 270,
+    margin      = list(t = 55, b = 60),
+    annotations = make_global_annotation(default_idx)
+  ) %>%
+  config(displayModeBar = FALSE)
+```
+
+Column {data-width=420}
+-----------------------------------------------------------------------
+
+### τ vs Time Window
+
+How clustering strength changes as the time window varies. Use the dropdown to switch season phase (both outcomes shown simultaneously).
+
+```{r}
+p_tau_window <- plot_ly()
+
+disease_colors <- c("DENV-3" = "#2f69b1", "ABV" = "#63b84a")
+
+# Add one trace per disease × season combination (6 total)
+# Order: for each season (3), add DENV-3 then ABV → trace indices 1-6
+for (s_idx in seq_along(season_levels)) {
+  s <- season_levels[s_idx]
+  vis_default <- (s_idx == 2)   # default: Mid season
+
+  for (d in c("DENV-3", "ABV")) {
+    key       <- paste(d, s, sep = "|")
+    tau_vals  <- tau_all[[key]]
+    tau_text  <- ifelse(is.na(tau_vals), "NA", sprintf("%.2f", tau_vals))
+
+    p_tau_window <- add_trace(
+      p_tau_window,
+      x           = windows,
+      y           = tau_vals,
+      type        = "scatter",
+      mode        = "lines+markers",
+      name        = d,
+      legendgroup = d,
+      line        = list(color = disease_colors[d], width = 1.5),
+      marker      = list(size = 6, color = disease_colors[d]),
+      visible     = vis_default,
+      showlegend  = vis_default,
+      text        = paste0("Outcome: ", d, "<br>Window: ", windows, " days<br>\u03C4: ", tau_text),
+      hoverinfo   = "text"
+    )
+  }
+}
+
+# Each button shows 2 traces for that season, hides the other 4
+buttons_season <- lapply(seq_along(season_levels), function(s_idx) {
+  vis_vec <- rep(FALSE, 6)
+  vis_vec[(2 * s_idx - 1):(2 * s_idx)] <- TRUE
+  show_leg <- rep(FALSE, 6)
+  show_leg[(2 * s_idx - 1):(2 * s_idx)] <- TRUE
+
+  list(
+    method = "update",
+    args   = list(list(visible     = as.list(vis_vec),
+                       showlegend  = as.list(show_leg))),
+    label  = gsub("^\\d+\\. ", "", season_levels[s_idx])
+  )
+})
+
+p_tau_window %>%
+  layout(
+    updatemenus = list(list(
+      type = "dropdown", x = 0.0, y = 1.15, xanchor = "left",
+      buttons = buttons_season, active = 1
+    )),
+    xaxis      = list(title = "Time Window (days)", tickvals = windows),
+    yaxis      = list(title = "\u03C4 (Clustering Ratio)"),
+    legend     = list(orientation = "h", y = -0.15),
+    height     = 270,
+    margin     = list(t = 55)
+  ) %>%
+  config(displayModeBar = FALSE)
+```
+
+### What does "Linked" mean?
+
+```{r}
+HTML("
+<div style='font-size:15px; line-height:1.6; padding: 4px 2px 0 2px;'>
+  <div style='margin-bottom:8px;'><b>Linked pair:</b> Both individuals are test-positive.</div>
+  <div><b>Unlinked pair:</b> At least one individual is test-negative.</div>
+</div>
+")
+```
