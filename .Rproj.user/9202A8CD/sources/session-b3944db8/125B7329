@@ -3,24 +3,24 @@
     "path": "~/Library/CloudStorage/OneDrive-Emory/DATA555/Final/index.Rmd",
     "project_path": "index.Rmd",
     "type": "r_markdown",
-    "hash": "3002395200",
+    "hash": "0",
     "contents": "",
-    "dirty": false,
+    "dirty": true,
     "created": 1777266381693.0,
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "2,15",
-        "scrollLine": "0"
+        "cursorPosition": "9,88",
+        "scrollLine": "1"
     },
     "folds": "",
     "lastKnownWriteTime": 1777275573,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1777275573718,
+    "last_content_update": 1777277034769,
     "read_only": false,
     "read_only_alternatives": []
 }
