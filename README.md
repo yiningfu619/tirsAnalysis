@@ -54,4 +54,9 @@ install.packages(c("flexdashboard", "shiny", "shinydashboard", "dplyr", "ggplot2
 
 # Usage
 
-Open index.Rmd in RStudio and click "Run Document" to launch the interactive Shiny dashboard for dynamic data exploration.
+To interact with the dashboard, you have two accessible options. 
+
+- For immediate access without needing to set up a local environment, you can explore the live, deployed version directly through your web browser by visiting [this interactive link](https://yiningfu619.github.io/tirsAnalysis/). 
+
+- To compile and run the application locally, you can open the `index.Rmd` file within RStudio and click the "Knit" button to generate and launch the dynamic data exploration dashboard on your own machine.
+
