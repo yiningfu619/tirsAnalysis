@@ -772,40 +772,65 @@ Column {data-width=200}
 
 ```{r}
 HTML("
-<div style='display:flex; flex-direction:column; gap:14px; padding: 8px 4px;'>
+<div style='background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06);'>
 
-  <div style='background:#1f3b73; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
-    <div style='font-size:36px; font-weight:800; line-height:1;'>4,461</div>
-    <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Children Enrolled</div>
+  <div style='background:#1f3b73; color:white; padding:10px 16px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;'>
+    At a Glance
   </div>
 
-  <div style='background:#2f69b1; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
-    <div style='font-size:36px; font-weight:800; line-height:1;'>50</div>
-    <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Geographic Clusters</div>
-  </div>
+  <div style='display:flex; flex-direction:column;'>
 
-  <div style='background:#58b947; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
-    <div style='font-size:36px; font-weight:800; line-height:1;'>3</div>
-    <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Epidemiological Seasons</div>
-  </div>
+    <div style='display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f1f5f9;'>
+      <div style='width:10px; height:36px; border-radius:4px; background:#1f3b73; margin-right:14px; flex-shrink:0;'></div>
+      <div>
+        <div style='font-size:28px; font-weight:800; color:#1f3b73; line-height:1;'>4,461</div>
+        <div style='font-size:12px; color:#64748b; margin-top:3px;'>Children Enrolled</div>
+      </div>
+    </div>
 
-  <div style='background:#e53935; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
-    <div style='font-size:15px; font-weight:800; line-height:1.3;'>2021 – 2023</div>
-    <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Study Period</div>
-  </div>
-  
-  <div style='background:#c27ba0; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
-    <a href='[https://clinicaltrials.gov/study/NCT04343521](https://clinicaltrials.gov/study/NCT04343521)' target='_blank' style='color:white; text-decoration:none;'>
-      <div style='font-size:18px; font-weight:800; line-height:1.2;'>NCT04343521 ↗</div>
-    </a>
-    <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Trial Registry</div>
-  </div>
+    <div style='display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f1f5f9;'>
+      <div style='width:10px; height:36px; border-radius:4px; background:#2f69b1; margin-right:14px; flex-shrink:0;'></div>
+      <div>
+        <div style='font-size:28px; font-weight:800; color:#2f69b1; line-height:1;'>50</div>
+        <div style='font-size:12px; color:#64748b; margin-top:3px;'>Geographic Clusters</div>
+      </div>
+    </div>
 
-  <div style='background:#8e7cc3; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
-    <div style='font-size:36px; font-weight:800; line-height:1;'>2 – 15</div>
-    <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Age Range (years)</div>
-  </div>
+    <div style='display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f1f5f9;'>
+      <div style='width:10px; height:36px; border-radius:4px; background:#58b947; margin-right:14px; flex-shrink:0;'></div>
+      <div>
+        <div style='font-size:28px; font-weight:800; color:#58b947; line-height:1;'>3</div>
+        <div style='font-size:12px; color:#64748b; margin-top:3px;'>Epi. Seasons</div>
+      </div>
+    </div>
 
+    <div style='display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f1f5f9;'>
+      <div style='width:10px; height:36px; border-radius:4px; background:#e53935; margin-right:14px; flex-shrink:0;'></div>
+      <div>
+        <div style='font-size:18px; font-weight:800; color:#e53935; line-height:1;'>2021–2023</div>
+        <div style='font-size:12px; color:#64748b; margin-top:3px;'>Study Period</div>
+      </div>
+    </div>
+
+    <div style='display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f1f5f9;'>
+      <div style='width:10px; height:36px; border-radius:4px; background:#c27ba0; margin-right:14px; flex-shrink:0;'></div>
+      <div>
+        <a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='text-decoration:none;'>
+          <div style='font-size:14px; font-weight:800; color:#c27ba0; line-height:1;'>NCT04343521 ↗</div>
+        </a>
+        <div style='font-size:12px; color:#64748b; margin-top:3px;'>Trial Registry</div>
+      </div>
+    </div>
+
+    <div style='display:flex; align-items:center; padding:14px 16px;'>
+      <div style='width:10px; height:36px; border-radius:4px; background:#8e7cc3; margin-right:14px; flex-shrink:0;'></div>
+      <div>
+        <div style='font-size:28px; font-weight:800; color:#8e7cc3; line-height:1;'>2–15</div>
+        <div style='font-size:12px; color:#64748b; margin-top:3px;'>Age Range (years)</div>
+      </div>
+    </div>
+
+  </div>
 </div>
 ")
 ```
@@ -817,59 +842,58 @@ Column {data-width=550}
 
 ```{r}
 HTML("
-<div style='max-width:720px; padding: 4px;'>
+<div style='padding: 2px 4px;'>
 
-  <div style='margin-bottom: 28px;'>
-    <div style='background: #1f3b73; color: white; border-radius: 10px 10px 0 0; padding: 12px 20px; font-weight: 800; font-size: 16px; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px;'>
-      <span style='font-size: 18px;'>📢</span> REAL-WORLD IMPACT & IMPORTANCE
+  <div style='margin-bottom:20px;'>
+    <div style='background:#1f3b73; color:white; border-radius:10px 10px 0 0; padding:12px 20px; font-weight:800; font-size:16px; letter-spacing:0.05em; display:flex; align-items:center; gap:8px;'>
+      <span style='font-size:18px;'>📢</span> REAL-WORLD IMPACT &amp; IMPORTANCE
     </div>
-    <div style='background: #ffffff; border: 2px solid #1f3b73; border-top: none; border-radius: 0 0 10px 10px; padding: 20px; box-shadow: 0 6px 12px rgba(0,0,0,0.08);'>
-      <div style='font-size: 15px; line-height: 1.8; color: #1e293b; font-weight: 500;'>
-        This interactive dashboard provides a framework for analyzing the spatiotemporal clustering of Aedes-borne viruses using test-negative design data, allowing users to determine whether disease transmission is localized or fully disseminated. By revealing that targeted indoor residual spraying (TIRS) is most effective during the early, highly clustered phases of an outbreak, these findings guide public health officials to deploy rapid interventions before community transmission becomes widespread.
+    <div style='background:#ffffff; border:2px solid #1f3b73; border-top:none; border-radius:0 0 10px 10px; padding:16px 20px; box-shadow:0 6px 12px rgba(0,0,0,0.08);'>
+      <div style='font-size:14px; line-height:1.8; color:#1e293b; font-weight:500;'>
+        This dashboard analyzes spatiotemporal clustering of Aedes-borne viruses using test-negative design data, helping determine whether disease transmission is localized or fully disseminated. Findings show that targeted indoor residual spraying (TIRS) is most effective during early, highly clustered outbreak phases — guiding public health officials to intervene before community transmission becomes widespread.
       </div>
     </div>
   </div>
 
-  <div style='height: 1px; background: #e2e8f0; margin-bottom: 24px; position: relative;'>
-    <span style='position: absolute; top: -10px; left: 20px; background: white; padding: 0 10px; color: #94a3b8; font-size: 12px; font-weight: 700; text-transform: uppercase;'>Dataset Specifications</span>
+  <div style='position:relative; margin-bottom:18px;'>
+    <div style='height:1px; background:#e2e8f0;'></div>
+    <span style='position:absolute; top:-9px; left:16px; background:white; padding:0 10px; color:#94a3b8; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;'>Dataset Specifications</span>
   </div>
 
-  <div style='display:flex; flex-direction:column; gap:10px;'>
+  <div style='display:grid; grid-template-columns:1fr 1fr; gap:10px;'>
 
-    <div style='display:flex; align-items:flex-start; gap:12px;'>
-      <div style='min-width:32px; height:32px; background:#1f3b73; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px; flex-shrink:0; margin-top:2px;'>1</div>
-      <div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; font-size:14px; line-height:1.5; color:#1e293b;'>
-        <b>Data Source &amp; Access:</b> The primary data source is a confidential trial-level dataset derived from a registered clinical trial
-        (<a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='color:#2f69b1;'>NCT04343521</a>)
-        and securely maintained in a <b>REDCap</b> database.
+    <div style='border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;'>
+      <div style='background:#1f3b73; color:white; font-size:11px; font-weight:700; padding:5px 10px; text-transform:uppercase; letter-spacing:0.05em;'>① Data Source</div>
+      <div style='padding:10px 12px; font-size:13px; line-height:1.55; color:#1e293b; background:#f8fafc;'>
+        Confidential trial dataset from <a href='https://clinicaltrials.gov/study/NCT04343521' target='_blank' style='color:#2f69b1; font-weight:600;'>NCT04343521</a>, maintained in <b>REDCap</b>.
       </div>
     </div>
 
-    <div style='display:flex; align-items:flex-start; gap:12px;'>
-      <div style='min-width:32px; height:32px; background:#2f69b1; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px; flex-shrink:0; margin-top:2px;'>2</div>
-      <div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; font-size:14px; line-height:1.5; color:#1e293b;'>
-        <b>Study Population:</b> The study population comprised <b>4,461 children aged 2–15 years</b> who were monitored across <b>50 geographical clusters</b>.
+    <div style='border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;'>
+      <div style='background:#2f69b1; color:white; font-size:11px; font-weight:700; padding:5px 10px; text-transform:uppercase; letter-spacing:0.05em;'>② Study Population</div>
+      <div style='padding:10px 12px; font-size:13px; line-height:1.55; color:#1e293b; background:#f8fafc;'>
+        <b>4,461 children aged 2–15 years</b> across <b>50 geographical clusters</b>.
       </div>
     </div>
 
-    <div style='display:flex; align-items:flex-start; gap:12px;'>
-      <div style='min-width:32px; height:32px; background:#58b947; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px; flex-shrink:0; margin-top:2px;'>3</div>
-      <div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; font-size:14px; line-height:1.5; color:#1e293b;'>
-        <b>Data Collection Method:</b> Data were prospectively collected via a <b>two-arm, parallel, unblinded, cluster-randomized trial</b> utilizing active weekly surveillance — including rotating home visits, phone calls, and SMS messaging — alongside laboratory <b>PCR and IgM testing</b> to confirm symptomatic infections.
+    <div style='border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;'>
+      <div style='background:#58b947; color:white; font-size:11px; font-weight:700; padding:5px 10px; text-transform:uppercase; letter-spacing:0.05em;'>③ Collection Method</div>
+      <div style='padding:10px 12px; font-size:13px; line-height:1.55; color:#1e293b; background:#f8fafc;'>
+        Two-arm cluster-RCT with weekly surveillance (home visits, calls, SMS) + <b>PCR &amp; IgM</b> lab testing.
       </div>
     </div>
 
-    <div style='display:flex; align-items:flex-start; gap:12px;'>
-      <div style='min-width:32px; height:32px; background:#e5a823; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px; flex-shrink:0; margin-top:2px;'>4</div>
-      <div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; font-size:14px; line-height:1.5; color:#1e293b;'>
-        <b>Study Location:</b> The research was conducted in an <b>Aedes-borne disease hotspot</b> located in <b>Mérida, Yucatan State, Mexico</b>.
+    <div style='border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;'>
+      <div style='background:#e5a823; color:white; font-size:11px; font-weight:700; padding:5px 10px; text-transform:uppercase; letter-spacing:0.05em;'>④ Study Location</div>
+      <div style='padding:10px 12px; font-size:13px; line-height:1.55; color:#1e293b; background:#f8fafc;'>
+        Aedes-borne disease hotspot in <b>Mérida, Yucatan State, Mexico</b>.
       </div>
     </div>
 
-    <div style='display:flex; align-items:flex-start; gap:12px;'>
-      <div style='min-width:32px; height:32px; background:#e53935; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px; flex-shrink:0; margin-top:2px;'>5</div>
-      <div style='background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; font-size:14px; line-height:1.5; color:#1e293b;'>
-        <b>Time Period:</b> Data collection spanned three distinct epidemiological seasons, actively monitoring the pediatric cohort from <b>July 1, 2021 to December 31, 2023</b>.
+    <div style='border-radius:8px; overflow:hidden; border:1px solid #e2e8f0; grid-column:1/-1;'>
+      <div style='background:#e53935; color:white; font-size:11px; font-weight:700; padding:5px 10px; text-transform:uppercase; letter-spacing:0.05em;'>⑤ Time Period</div>
+      <div style='padding:10px 12px; font-size:13px; line-height:1.55; color:#1e293b; background:#f8fafc;'>
+        Three epidemiological seasons monitored from <b>July 1, 2021 to December 31, 2023</b>.
       </div>
     </div>
 
@@ -880,30 +904,60 @@ HTML("
 
 Column {data-width=250}
 -----------------------------------------------------------------------
-### Study Limitations
+
+### &nbsp;
 
 ```{r}
 HTML("
-<div style='display:flex; flex-direction:column; gap:12px;'>
-    
-    <div style='background:#f8fafc; border-left:4px solid #e53935; border-radius:4px 8px 8px 4px; padding:12px 16px; font-size:14px; line-height:1.6; color:#1e293b; box-shadow:0 1px 2px rgba(0,0,0,0.04);'>
-      <b>Nature of Secondary Analysis:</b> As a secondary analysis of a cluster randomized trial, the study is constrained by the original trial's design and data collection protocols, limiting the ability to adapt sampling strategies for new research questions.
-    </div>
-    
-    <div style='background:#f8fafc; border-left:4px solid #e5a823; border-radius:4px 8px 8px 4px; padding:12px 16px; font-size:14px; line-height:1.6; color:#1e293b; box-shadow:0 1px 2px rgba(0,0,0,0.04);'>
-      <b>Statistical Power Constraints:</b> Due to the sharp decline in DENV-3 cases after August, the analytical scope was expanded to include all general Aedes-borne viruses (ABV). This aggregation may obscure the unique transmission dynamics of individual virus strains.
+<div style='background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06);'>
+
+  <div style='background:#374151; color:white; padding:10px 16px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;'>
+    ⚠ Study Limitations
+  </div>
+
+  <div style='padding:0 16px 4px 16px;'>
+
+    <div style='padding:14px 0; border-bottom:1px solid #f1f5f9;'>
+      <div style='display:flex; align-items:center; gap:8px; margin-bottom:5px;'>
+        <div style='width:12px; height:12px; border-radius:50%; background:#e53935; flex-shrink:0;'></div>
+        <span style='font-size:13px; font-weight:700; color:#1e293b;'>Secondary Analysis</span>
+      </div>
+      <div style='font-size:13px; line-height:1.6; color:#475569; padding-left:20px;'>
+        Constrained by the original trial's design and protocols, limiting adaptation for new research questions.
+      </div>
     </div>
 
-    <div style='background:#f8fafc; border-left:4px solid #2f69b1; border-radius:4px 8px 8px 4px; padding:12px 16px; font-size:14px; line-height:1.6; color:#1e293b; box-shadow:0 1px 2px rgba(0,0,0,0.04);'>
-      <b>Temporal Generalizability:</b> The analysis specifically focuses on the 2023 season, which was an anomalous year characterized by an unprecedented high volume of cases. The spatial clustering patterns observed during this extreme outbreak may not be fully applicable to standard or low-transmission seasons.
+    <div style='padding:14px 0; border-bottom:1px solid #f1f5f9;'>
+      <div style='display:flex; align-items:center; gap:8px; margin-bottom:5px;'>
+        <div style='width:12px; height:12px; border-radius:50%; background:#e5a823; flex-shrink:0;'></div>
+        <span style='font-size:13px; font-weight:700; color:#1e293b;'>Statistical Power</span>
+      </div>
+      <div style='font-size:13px; line-height:1.6; color:#475569; padding-left:20px;'>
+        Sharp DENV-3 decline required expanding to ABV, which may obscure individual virus transmission dynamics.
+      </div>
     </div>
 
-    <div style='background:#f8fafc; border-left:4px solid #1f3b73; border-radius:4px 8px 8px 4px; padding:12px 16px; font-size:14px; line-height:1.6; color:#1e293b; box-shadow:0 1px 2px rgba(0,0,0,0.04);'>
-      <b>Intervention Threshold:</b> The effectiveness of targeted indoor residual spraying (TIRS) is highly sensitive to the timing of deployment. Once viral transmission transitions from localized clusters to a citywide disseminated phase, community-level interventions alone are no longer sufficient.
+    <div style='padding:14px 0; border-bottom:1px solid #f1f5f9;'>
+      <div style='display:flex; align-items:center; gap:8px; margin-bottom:5px;'>
+        <div style='width:12px; height:12px; border-radius:50%; background:#2f69b1; flex-shrink:0;'></div>
+        <span style='font-size:13px; font-weight:700; color:#1e293b;'>Temporal Generalizability</span>
+      </div>
+      <div style='font-size:13px; line-height:1.6; color:#475569; padding-left:20px;'>
+        Focused on 2023 — an anomalously high-transmission year. Clustering patterns may not apply to standard seasons.
+      </div>
+    </div>
+
+    <div style='padding:14px 0;'>
+      <div style='display:flex; align-items:center; gap:8px; margin-bottom:5px;'>
+        <div style='width:12px; height:12px; border-radius:50%; background:#1f3b73; flex-shrink:0;'></div>
+        <span style='font-size:13px; font-weight:700; color:#1e293b;'>Intervention Threshold</span>
+      </div>
+      <div style='font-size:13px; line-height:1.6; color:#475569; padding-left:20px;'>
+        TIRS effectiveness is timing-sensitive. Once transmission shifts citywide, community-level interventions alone are insufficient.
+      </div>
     </div>
 
   </div>
 </div>
 ")
 ```
-
