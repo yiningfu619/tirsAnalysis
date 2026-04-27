@@ -20,7 +20,7 @@ This interactive dashboard provides a framework for analyzing the spatiotemporal
 
 # Repository Contents
 
-- index.Rmd: An interactive analytical dashboard built with flexdashboard and shiny. This application provides a dynamic user interface to visually explore participant demographics, temporal case distributions, and real-time calculations of the tau statistic by allowing users to seamlessly adjust temporal windows and seasonal phases.
+- index.Rmd: An interactive analytical dashboard built with flexdashboard. This application provides a dynamic user interface to visually explore participant demographics, temporal case distributions, and real-time calculations of the tau statistic by allowing users to seamlessly adjust temporal windows and seasonal phases.
 
 # Software Requirements and Dependencies
 
