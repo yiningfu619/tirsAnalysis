@@ -794,14 +794,14 @@ HTML("
     <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Study Period</div>
   </div>
   
-  <div style='background:#e5a823; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
+  <div style='background:#c27ba0; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
     <a href='[https://clinicaltrials.gov/study/NCT04343521](https://clinicaltrials.gov/study/NCT04343521)' target='_blank' style='color:white; text-decoration:none;'>
       <div style='font-size:18px; font-weight:800; line-height:1.2;'>NCT04343521 ↗</div>
     </a>
     <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Trial Registry</div>
   </div>
 
-  <div style='background:#0288d1; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
+  <div style='background:#8e7cc3; color:white; border-radius:10px; padding:18px 16px; text-align:center;'>
     <div style='font-size:36px; font-weight:800; line-height:1;'>2 – 15</div>
     <div style='font-size:13px; margin-top:6px; opacity:0.9;'>Age Range (years)</div>
   </div>
